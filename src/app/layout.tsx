@@ -1,3 +1,4 @@
+import { Toaster } from "@/components/ui/toaster";
 import { Inter } from "next/font/google";
 import "./globals.css";
 
@@ -17,6 +18,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${inter.className} bg-neutral-900 p-4`}>
         {children}
+        <Toaster />
       </body>
     </html>
   );

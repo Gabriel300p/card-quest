@@ -27,25 +27,17 @@ const ViewedCardsList = ({ viewedCards }: ViewedCardsListProps) => {
         Viewed Cards
       </button>
       {isListOpen && (
-        <div className="fixed inset-0 bg-gray-900 bg-opacity-50 flex justify-center items-center">
-          <div className="bg-white rounded-lg w-1/2 p-4">
-            <h2 className="text-lg font-bold mb-4">Viewed Cards</h2>
-            <button
-              className="absolute top-2 right-2 text-gray-500 hover:text-gray-600 focus:outline-none"
-              onClick={handleListClose}
+        <ul className="list-none flex flex-col gap-3 p-5 rounded-md border border-neutral-700 mt-7">
+          {viewedCards.map((card, index) => (
+            <li
+              key={card.id}
+              className="text-sm font-semibold text-gray-100 flex items-center gap-1"
             >
-              {/* <FontAwesomeIcon icon={faTimes} /> */}
-              Teste
-            </button>
-            <ul className="list-none p-0">
-              {viewedCards.map((card) => (
-                <li key={card.title} className="mb-2">
-                  {card.title}
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div>
+              <span className="font-regular text-gray-300">{index + 1} - </span>
+              {card.title}
+            </li>
+          ))}
+        </ul>
       )}
     </div>
   );
