@@ -17,14 +17,20 @@ export interface CardProps {
 const Card = ({ id, title, challenge, ifNot }: CardProps) => {
   const { toast } = useToast();
   const { addToViewedCards } = useStore();
-  const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const handleCompleteClick = () => {
+  const feito = () => {
     addToViewedCards({ id, title, challenge, ifNot });
-    setIsModalOpen(false);
     toast({
-      title: "Scheduled: Catch up",
-      description: "Friday, February 10, 2023 at 5:57 PM",
+      title: "Você cumpriu com o desafio",
+      description: "Ganhou 10 pontos",
+    });
+  };
+
+  const desafio = () => {
+    addToViewedCards({ id, title, challenge, ifNot });
+    toast({
+      title: "Você não cumpriu com o desafio",
+      description: "Não ganhou pontos",
     });
   };
 
@@ -54,9 +60,9 @@ const Card = ({ id, title, challenge, ifNot }: CardProps) => {
         </div>
       </div>
       <div className="grid grid-cols-2 gap-2 mb-2">
-        <Button onClick={handleCompleteClick}>Vou fazer</Button>
-        <Button variant="outline" onClick={handleCompleteClick}>
-          Desafio
+        <Button onClick={feito}>Vou fazer</Button>
+        <Button variant="outline" onClick={desafio}>
+          Não vou
         </Button>
       </div>
     </div>
