@@ -1,7 +1,7 @@
 "use client";
 
 import { useStore } from "@/hooks/store";
-import { useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { EffectCards } from "swiper";
 import { Swiper, SwiperSlide } from "swiper/react";
 import Card, { CardProps } from "./Card";
@@ -14,54 +14,52 @@ interface CardCarouselProps {
 
 const CardCarousel = ({ cards }: CardCarouselProps) => {
   const { viewedCards, addToViewedCards, resetCards } = useStore();
-  const [swiper, setSwiper] = useState<any>(null);
-  const handleRandomCardClick = () => {
-    if (viewedCards.length < cards.length && swiper) {
-      const unviewedCards = cards.filter(
-        (card) => !viewedCards.some((viewedCard) => viewedCard.id === card.id)
-      );
-      const randomIndex = Math.floor(Math.random() * unviewedCards.length);
+  const swiperRef = useRef<any>(null);
+  const slidesRef = useRef<any[]>([]);
 
-      // Adicione uma animação de rotação aleatória aos cards com uma duração de 1 segundo
-      swiper.slides.forEach((slide: any) => {
-        slide.transform = `rotate(${Math.random() * 360}deg)`;
-      });
+  // UseMemo para armazenar o conjunto de cards não visualizados
+  const memoizedUnviewedCards = useMemo(() => {
+    return cards.filter(
+      (card) => !viewedCards.some((viewedCard) => viewedCard.id === card.id)
+    );
+  }, [cards, viewedCards]);
+
+  useEffect(() => {
+    if (swiperRef.current) {
+      swiperRef.current.slides = slidesRef.current;
+    }
+  }, [memoizedUnviewedCards]);
+
+  const handleRandomCardClick = () => {
+    if (
+      viewedCards.length < cards.length &&
+      swiperRef.current &&
+      swiperRef.current.swiper
+    ) {
+      const randomIndex = Math.floor(
+        Math.random() * memoizedUnviewedCards.length
+      );
+
+      // Adicione uma classe de animação para girar o card
+      swiperRef.current.swiper.slides[randomIndex].classList.add("rotate-card");
 
       // Deslize para o card aleatório com uma duração de 0.5 segundos
-      swiper.slideTo(randomIndex, 500, true);
+      swiperRef.current.swiper.slideTo(randomIndex, 600, true);
 
-      // Adicione um efeito de vibração aos cards enquanto eles estão sendo girados
-      swiper.slides.forEach((slide: any) => {
-        slide.addEventListener("transitionEnd", () => {
-          slide.classList.add("shake");
-        });
-      });
-
-      // Remova o efeito de vibração dos cards após a animação de deslizar terminar
-      swiper.on("transitionEnd", () => {
-        swiper.slides.forEach((slide: any) => {
-          slide.classList.remove("shake");
-        });
-      });
-
-      // Adicione um movimento de vai e volta aos cards
-      swiper.slides.forEach((slide: any) => {
-        slide.addEventListener("transitionEnd", () => {
-          slide.style.transform = `translateX(${Math.random() * 100}px)`;
-        });
-      });
+      // Remova a classe de animação após a animação de deslizar terminar
+      setTimeout(() => {
+        swiperRef.current.swiper.slides[randomIndex].classList.remove(
+          "rotate-card"
+        );
+      }, 500);
     }
   };
 
   const handleResetClick = () => {
     resetCards();
-    if (swiper) {
-      swiper.slideTo(0, 300, false);
+    if (swiperRef.current) {
+      swiperRef.current.slideTo(0, 300, false);
     }
-  };
-
-  const handleSwiperInit = (swiperInstance: any) => {
-    setSwiper(swiperInstance);
   };
 
   return (
@@ -74,7 +72,7 @@ const CardCarousel = ({ cards }: CardCarouselProps) => {
             effect={"cards"}
             grabCursor={true}
             modules={[EffectCards]}
-            onSwiper={handleSwiperInit}
+            ref={swiperRef}
             className="mySwiper"
           >
             {cards.map((card) => {
@@ -88,13 +86,27 @@ const CardCarousel = ({ cards }: CardCarouselProps) => {
                 <SwiperSlide
                   key={card.id}
                   className={`bg-neutral-800 shadow-md p-4 flex items-center justify-center rounded-2xl h-96 w-40
-    ${card.type === "Sorteado" ? "border-[5px] border-emerald-700" : ""}
-    ${card.type === "Crítico" ? "border-[5px] border-pink-700" : ""}
-    ${card.type === "Normal" ? "border-[5px] border-neutral-700" : ""}
-    ${card.type === "Votação" ? "border-[5px] border-sky-700" : ""}
-
-  `}
-                  // className="bg-neutral-800 border-[5px] border-pink-800  shadow-md p-4 flex items-center justify-center rounded-2xl h-80 w-40"
+                    ${
+                      card.type === "Sorteado"
+                        ? "border-[5px] border-emerald-700"
+                        : ""
+                    }
+                    ${
+                      card.type === "Crítico"
+                        ? "border-[5px] border-pink-700"
+                        : ""
+                    }
+                    ${
+                      card.type === "Normal"
+                        ? "border-[5px] border-neutral-700"
+                        : ""
+                    }
+                    ${
+                      card.type === "Votação"
+                        ? "border-[5px] border-sky-700"
+                        : ""
+                    }
+                  `}
                 >
                   <Card {...card} />
                 </SwiperSlide>
