@@ -15,11 +15,11 @@ const FetchCards = () => {
   const { isLoading, error, data } = useQuery("cards", fetchCards);
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <p className="text-gray-100">Carregando...</p>;
   }
 
   if (error) {
-    return <div>Failed to fetch cards.</div>;
+    return <p className="text-gray-100">Erro ao carregar os cards.</p>;
   }
 
   return (

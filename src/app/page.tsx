@@ -13,7 +13,7 @@ export default function App() {
       <div className="flex items-center justify-between">
         <h3 className="text-neutral-50 font-bold text-xl">Card Quest</h3>
         <Link href="/create-new-card">
-          <Button>Criar novo card</Button>
+          <Button variant="destructive">Criar novo card</Button>
         </Link>
       </div>
 

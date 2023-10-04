@@ -16,6 +16,7 @@ model Card {
   challenge String
   ifNot     String?
   points    Int?
+  type      String
   themes    String[]
   section   String
   creation  String   @default("system")

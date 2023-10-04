@@ -6,6 +6,7 @@ import { EffectCards } from "swiper";
 import { Swiper, SwiperSlide } from "swiper/react";
 import Card, { CardProps } from "./Card";
 import ViewedCardsList from "./ViewedCardsList";
+import { Button } from "./ui/button";
 
 interface CardCarouselProps {
   cards: CardProps[];
@@ -42,7 +43,7 @@ const CardCarousel = ({ cards }: CardCarouselProps) => {
     <div className="relative">
       <div className="overflow-hidden py-8">
         {viewedCards.length === cards.length ? (
-          <p className="text-center">All cards have been viewed.</p>
+          <p className="text-center text-white">Todos os cards foram vistos.</p>
         ) : (
           <Swiper
             effect={"cards"}
@@ -61,7 +62,14 @@ const CardCarousel = ({ cards }: CardCarouselProps) => {
               return (
                 <SwiperSlide
                   key={card.id}
-                  className="bg-neutral-800 border-[5px] border-pink-800 shadow-md p-4 flex items-center justify-center rounded-2xl h-80 w-40"
+                  className={`bg-neutral-800 shadow-md p-4 flex items-center justify-center rounded-2xl h-96 w-40
+    ${card.type === "Sorteado" ? "border-[5px] border-emerald-700" : ""}
+    ${card.type === "Crítico" ? "border-[5px] border-pink-700" : ""}
+    ${card.type === "Normal" ? "border-[5px] border-neutral-700" : ""}
+    ${card.type === "Votação" ? "border-[5px] border-sky-700" : ""}
+
+  `}
+                  // className="bg-neutral-800 border-[5px] border-pink-800  shadow-md p-4 flex items-center justify-center rounded-2xl h-80 w-40"
                 >
                   <Card {...card} />
                 </SwiperSlide>
@@ -70,20 +78,16 @@ const CardCarousel = ({ cards }: CardCarouselProps) => {
           </Swiper>
         )}
       </div>
-      <div className="flex flex-col gap-3 justify-between items-center mt-5">
-        <button
-          className="py-2 px-4 bg-gray-800 text-white rounded-md hover:bg-gray-700 focus:outline-none disabled:bg-neutral-400"
+      <div className="flex flex-col gap-4 justify-center items-center mt-5">
+        <Button
           onClick={handleRandomCardClick}
           disabled={viewedCards.length === cards.length}
         >
           Escolha um card aleatório
-        </button>
-        <button
-          className="py-2 px-4 bg-red-500 text-white rounded-md hover:bg-red-400 focus:outline-none"
-          onClick={handleResetClick}
-        >
+        </Button>
+        <Button variant="secondary" onClick={handleResetClick}>
           Começar do zero
-        </button>
+        </Button>
         {viewedCards.length > 0 && (
           <ViewedCardsList viewedCards={viewedCards} />
         )}
