@@ -13,7 +13,8 @@ interface CardCarouselProps {
 }
 
 const CardCarousel = ({ cards }: CardCarouselProps) => {
-  const { viewedCards, addToViewedCards, resetCards } = useStore();
+  const { viewedCards, resetCards } = useStore();
+  const [randomCardId, setRandomCardId] = useState(null);
   const swiperRef = useRef<any>(null);
   const slidesRef = useRef<any[]>([]);
 
@@ -39,19 +40,13 @@ const CardCarousel = ({ cards }: CardCarouselProps) => {
       const randomIndex = Math.floor(
         Math.random() * memoizedUnviewedCards.length
       );
-
-      // Adicione uma classe de animação para girar o card
       swiperRef.current.swiper.slides[randomIndex].classList.add("rotate-card");
-
-      // Deslize para o card aleatório com uma duração de 0.5 segundos
-      swiperRef.current.swiper.slideTo(randomIndex, 600, true);
-
-      // Remova a classe de animação após a animação de deslizar terminar
+      swiperRef.current.swiper.slideTo(randomIndex, 800, true);
       setTimeout(() => {
         swiperRef.current.swiper.slides[randomIndex].classList.remove(
           "rotate-card"
         );
-      }, 500);
+      }, 10000);
     }
   };
 

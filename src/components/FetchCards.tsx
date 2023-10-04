@@ -12,16 +12,20 @@ const fetchCards = async () => {
 };
 
 const FetchCards = () => {
+  // Use a destruturação para extrair as variáveis de useQuery
   const { isLoading, error, data } = useQuery("cards", fetchCards);
 
+  // Verifique o carregamento
   if (isLoading) {
     return <p className="text-gray-100">Carregando...</p>;
   }
 
+  // Trate os erros com o componente ErrorMessage
   if (error) {
     return <p className="text-gray-100">Erro ao carregar os cards.</p>;
   }
 
+  // Renderize o componente CardCarousel com os dados
   return (
     <div className="mt-4">
       <CardCarousel cards={data} />
