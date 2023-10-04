@@ -15,16 +15,41 @@ interface CardCarouselProps {
 const CardCarousel = ({ cards }: CardCarouselProps) => {
   const { viewedCards, addToViewedCards, resetCards } = useStore();
   const [swiper, setSwiper] = useState<any>(null);
-
   const handleRandomCardClick = () => {
     if (viewedCards.length < cards.length && swiper) {
       const unviewedCards = cards.filter(
         (card) => !viewedCards.some((viewedCard) => viewedCard.id === card.id)
       );
       const randomIndex = Math.floor(Math.random() * unviewedCards.length);
-      // const card = unviewedCards[randomIndex];
-      // addToViewedCards(card);
-      swiper.slideTo(randomIndex, 400, true);
+
+      // Adicione uma animação de rotação aleatória aos cards com uma duração de 1 segundo
+      swiper.slides.forEach((slide: any) => {
+        slide.transform = `rotate(${Math.random() * 360}deg)`;
+      });
+
+      // Deslize para o card aleatório com uma duração de 0.5 segundos
+      swiper.slideTo(randomIndex, 500, true);
+
+      // Adicione um efeito de vibração aos cards enquanto eles estão sendo girados
+      swiper.slides.forEach((slide: any) => {
+        slide.addEventListener("transitionEnd", () => {
+          slide.classList.add("shake");
+        });
+      });
+
+      // Remova o efeito de vibração dos cards após a animação de deslizar terminar
+      swiper.on("transitionEnd", () => {
+        swiper.slides.forEach((slide: any) => {
+          slide.classList.remove("shake");
+        });
+      });
+
+      // Adicione um movimento de vai e volta aos cards
+      swiper.slides.forEach((slide: any) => {
+        slide.addEventListener("transitionEnd", () => {
+          slide.style.transform = `translateX(${Math.random() * 100}px)`;
+        });
+      });
     }
   };
 
@@ -49,8 +74,8 @@ const CardCarousel = ({ cards }: CardCarouselProps) => {
             effect={"cards"}
             grabCursor={true}
             modules={[EffectCards]}
-            className="mySwiper"
             onSwiper={handleSwiperInit}
+            className="mySwiper"
           >
             {cards.map((card) => {
               const isViewed = viewedCards.some(

@@ -1,5 +1,5 @@
 import { CardProps } from "@/components/Card";
-import create from "zustand";
+import { create } from "zustand";
 
 interface StoreState {
   viewedCards: CardProps[];

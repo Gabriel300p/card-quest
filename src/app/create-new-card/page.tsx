@@ -47,6 +47,7 @@ export default function CreateNewCard() {
       challenge: "",
       ifNot: "",
       section: "",
+      type: "",
       points: 0,
     },
   });
