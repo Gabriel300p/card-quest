@@ -33,6 +33,7 @@ const formSchema = z.object({
   ifNot: z.string(),
   section: z.string(),
   points: z.number(),
+  type: z.string(),
 });
 
 export default function CreateNewCard() {
@@ -127,7 +128,29 @@ export default function CreateNewCard() {
               </FormItem>
             )}
           />
-
+          <FormField
+            control={form.control}
+            name="type"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Seção de criação</FormLabel>
+                <Select onValueChange={field.onChange}>
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Selecione qual tipo será criada" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    <SelectItem value="Normal">Normal</SelectItem>
+                    <SelectItem value="Crítico">Crítico</SelectItem>
+                    <SelectItem value="Votação">Votação</SelectItem>
+                    <SelectItem value="Sorteado">Sorteado</SelectItem>
+                  </SelectContent>
+                </Select>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
           <FormField
             control={form.control}
             name="section"

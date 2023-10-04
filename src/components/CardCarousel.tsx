@@ -24,7 +24,7 @@ const CardCarousel = ({ cards }: CardCarouselProps) => {
       const randomIndex = Math.floor(Math.random() * unviewedCards.length);
       // const card = unviewedCards[randomIndex];
       // addToViewedCards(card);
-      swiper.slideTo(randomIndex, 300, false);
+      swiper.slideTo(randomIndex, 400, true);
     }
   };
 

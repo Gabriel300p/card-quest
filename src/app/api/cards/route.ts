@@ -18,6 +18,7 @@ export async function POST(request: Request) {
       themes: cards.themes,
       section: cards.section,
       points: cards.points,
+      type: cards.type,
       creation: "system",
     },
   });
